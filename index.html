@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Game Bầu Online</title>
+  <script type="module">
+    // Import Firebase SDK từ CDN
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // ⚠️ Thay bằng config của bạn từ Firebase Console
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    // Khởi tạo Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Hàm đăng nhập Google
+    async function login() {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      document.getElementById("user").innerText = "Xin chào " + result.user.displayName;
+    }
+
+    // Hàm ghi phiếu bầu
+    async function vote(choice) {
+      await addDoc(collection(db, "votes"), {
+        player: auth.currentUser ? auth.currentUser.uid : "guest",
+        choice: choice,
+        timestamp: new Date()
+      });
+      alert("Bạn đã bầu chọn: " + choice);
+    }
+
+    // Hàm xem kết quả
+    async function showVotes() {
+      const querySnapshot = await getDocs(collection(db, "votes"));
+      let output = "";
+      querySnapshot.forEach((doc) => {
+        output += JSON.stringify(doc.data()) + "<br>";
+      });
+      document.getElementById("results").innerHTML = output;
+    }
+
+    // Gắn sự kiện vào nút
+    window.login = login;
+    window.vote = vote;
+    window.showVotes = showVotes;
+  </script>
+</head>
+<body>
+  <h1>Game Bầu Online</h1>
+  <button onclick="login()">Đăng nhập Google</button>
+  <p id="user"></p>
+
+  <h2>Bầu chọn</h2>
+  <button onclick="vote('A')">Chọn A</button>
+  <button onclick="vote('B')">Chọn B</button>
+  <button onclick="vote('C')">Chọn C</button>
+
+  <h2>Kết quả</h2>
+  <button onclick="showVotes()">Xem kết quả</button>
+  <div id="results"></div>
+</body>
+</html>
