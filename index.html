@@ -10,14 +10,16 @@
     import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     // ⚠️ Thay bằng config của bạn từ Firebase Console
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyCeZzulq4dVtAEnh5qBkw93jcR65J2xOVQ",
+    authDomain: "tamcat-286f1.firebaseapp.com",
+    databaseURL: "https://tamcat-286f1-default-rtdb.firebaseio.com",
+    projectId: "tamcat-286f1",
+    storageBucket: "tamcat-286f1.firebasestorage.app",
+    messagingSenderId: "651517547917",
+    appId: "1:651517547917:web:bedbcb90cb6fd5755cd9c4",
+    measurementId: "G-ERH4NMKJY2"
+  };
 
     // Khởi tạo Firebase
     const app = initializeApp(firebaseConfig);
