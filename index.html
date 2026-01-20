@@ -1,76 +1,115 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Game Bầu Online</title>
-  <script type="module">
-    // Import Firebase SDK từ CDN
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cổng Game 10A2 Online</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a237e, #b71c1c);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            text-align: center;
+        }
 
-    // ⚠️ Thay bằng config của bạn từ Firebase Console
-  const firebaseConfig = {
-    apiKey: "AIzaSyCeZzulq4dVtAEnh5qBkw93jcR65J2xOVQ",
-    authDomain: "tamcat-286f1.firebaseapp.com",
-    databaseURL: "https://tamcat-286f1-default-rtdb.firebaseio.com",
-    projectId: "tamcat-286f1",
-    storageBucket: "tamcat-286f1.firebasestorage.app",
-    messagingSenderId: "651517547917",
-    appId: "1:651517547917:web:bedbcb90cb6fd5755cd9c4",
-    measurementId: "G-ERH4NMKJY2"
-  };
+        h1 {
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px #000;
+            margin-bottom: 10px;
+        }
 
-    // Khởi tạo Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+        p { color: #ddd; margin-bottom: 40px; }
 
-    // Hàm đăng nhập Google
-    async function login() {
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      document.getElementById("user").innerText = "Xin chào " + result.user.displayName;
-    }
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-    // Hàm ghi phiếu bầu
-    async function vote(choice) {
-      await addDoc(collection(db, "votes"), {
-        player: auth.currentUser ? auth.currentUser.uid : "guest",
-        choice: choice,
-        timestamp: new Date()
-      });
-      alert("Bạn đã bầu chọn: " + choice);
-    }
+        .game-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    // Hàm xem kết quả
-    async function showVotes() {
-      const querySnapshot = await getDocs(collection(db, "votes"));
-      let output = "";
-      querySnapshot.forEach((doc) => {
-        output += JSON.stringify(doc.data()) + "<br>";
-      });
-      document.getElementById("results").innerHTML = output;
-    }
+        .game-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
 
-    // Gắn sự kiện vào nút
-    window.login = login;
-    window.vote = vote;
-    window.showVotes = showVotes;
-  </script>
+        .icon { font-size: 3rem; margin-bottom: 10px; }
+        .title { font-weight: bold; font-size: 1.2rem; }
+        .desc { font-size: 0.8rem; color: #ccc; margin-top: 5px; }
+
+        /* Màu riêng cho từng thẻ để sinh động */
+        .card-baucua { border-bottom: 4px solid #ffeb3b; }
+        .card-xidach { border-bottom: 4px solid #4caf50; }
+        .card-loto { border-bottom: 4px solid #e91e63; }
+        .card-conbo { border-bottom: 4px solid #ff9800; }
+        .card-baicao { border-bottom: 4px solid #2196f3; }
+
+        footer {
+            margin-top: 50px;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+    </style>
 </head>
 <body>
-  <h1>Game Bầu Online</h1>
-  <button onclick="login()">Đăng nhập Google</button>
-  <p id="user"></p>
 
-  <h2>Bầu chọn</h2>
-  <button onclick="vote('A')">Chọn A</button>
-  <button onclick="vote('B')">Chọn B</button>
-  <button onclick="vote('C')">Chọn C</button>
+    <h1>🎮 SÒNG BÀI 10A2 🎲</h1>
+    <p>Chọn game để bắt đầu sát phạt (Vui là chính!)</p>
 
-  <h2>Kết quả</h2>
-  <button onclick="showVotes()">Xem kết quả</button>
-  <div id="results"></div>
+    <div class="game-grid">
+        <a href="baucua.html" class="game-card card-baucua">
+            <div class="icon">🦌</div>
+            <div class="title">Bầu Cua</div>
+            <div class="desc">Xóc đĩa dân gian</div>
+        </a>
+
+        <a href="xidach.html" class="game-card card-xidach">
+            <div class="icon">♣️</div>
+            <div class="title">Xì Dách</div>
+            <div class="desc">Đủ tuổi hay Quắc?</div>
+        </a>
+
+        <a href="baicao.html" class="game-card card-baicao">
+            <div class="icon">🃏</div>
+            <div class="title">Bài Cào</div>
+            <div class="desc">Nặn bài 3 lá</div>
+        </a>
+
+        <a href="loto.html" class="game-card card-loto">
+            <div class="icon">🎱</div>
+            <div class="title">Lô Tô</div>
+            <div class="desc">Dò số kêu lô tô</div>
+        </a>
+
+        <a href="conbo.html" class="game-card card-conbo">
+            <div class="icon">🐞</div>
+            <div class="title">Bọ Tìm Số</div>
+            <div class="desc">Vòng quay may mắn</div>
+        </a>
+    </div>
+
+    <footer>
+        Dev by Tuấn Kiệt - 10A2 | Server by Google Firebase
+    </footer>
+
 </body>
 </html>
